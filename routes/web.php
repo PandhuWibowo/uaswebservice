@@ -15,8 +15,8 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/students', ['uses' => 'StudentController@index']);
-$router->get('/students/{id}', ['uses' => 'StudentController@detailindex']);
+$router->get('/students', ['uses' => 'StudentController@show']);
+$router->get('/students/{id}', ['uses' => 'StudentController@detailshow']);
 $router->post('/students', ['uses' => 'StudentController@create']);
 $router->put('/students/{id}', ['uses' => 'StudentController@update']);
 $router->delete('/students/{id}', ['uses' => 'StudentController@delete']);

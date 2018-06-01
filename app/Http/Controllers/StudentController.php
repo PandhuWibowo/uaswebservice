@@ -20,7 +20,7 @@ class StudentController extends Controller
     }
 
     //
-    public function index(){
+    public function show(){
         try { 
             $st = Student::all();
             return response()->json($st, 200);
@@ -29,7 +29,7 @@ class StudentController extends Controller
         }
     }
 
-    public function detailindex($id){
+    public function detailshow($id){
         return response()->json(Student::find($id));
     }
 
