@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-// use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
-// use App\Http\Models\Category;
-use App\Http\Models\Student;
+use App\Student;
 use Illuminate\Http\Request;
-class StudentController extends Controller
+use Illuminate\Http\Response;
+use App\Transformers\StudentTransformer;
+
+class StudentController extends BaseController
 {
     /**
      * Create a new controller instance.
@@ -19,38 +19,38 @@ class StudentController extends Controller
         //
     }
 
-    //
-    public function show(){
-        try { 
-            $st = Student::all();
-            return response()->json($st, 200);
-        } catch(\Illuminate\Database\QueryException $ex){ 
-            dd($ex->getMessage());
-        }
+    public function show()
+    {
+        $st = Student::all();
+
+        return $this->response->collection($st, new StudentTransformer);
     }
 
-    public function detailshow($id){
-        return response()->json(Student::find($id));
+    public function showDetails($id)
+    {
+        $st = Student::find($id);
+
+        return $this->response->item($st, new StudentTransformer);
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $st = Student::create($request->all());
 
         return response()->json($st, 201);
     }
 
-    public function update(Request $request,$id)
+    public function update($id, Request $request)
     {
         $st = Student::findOrFail($id);
         $st->update($request->all());
+
         return response()->json($st, 200);
     }
 
     public function delete($id)
     {
         Student::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        return response('Students has been success deleted', 200);
     }
-
 }

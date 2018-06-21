@@ -25,6 +25,14 @@ $app = new Laravel\Lumen\Application(
 
 $app->withFacades();
 
+if (!class_exists('DingoApi')) {
+    class_alias('Dingo\Api\Facade\API', 'DingoApi');
+}
+
+if (!class_exists('DingoRoute')) {
+    class_alias('Dingo\Api\Facade\Route', 'DingoRoute');
+}
+
 $app->withEloquent();
 
 /*
@@ -47,6 +55,7 @@ $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
     App\Console\Kernel::class
 );
+
 
 /*
 |--------------------------------------------------------------------------
@@ -78,10 +87,9 @@ $app->singleton(
 |
 */
 
-$app->register(App\Providers\AppServiceProvider::class);
-$app->register(App\Providers\AuthServiceProvider::class);
-$app->register(App\Providers\EventServiceProvider::class);
-
+// $app->register(App\Providers\AppServiceProvider::class);
+// $app->register(App\Providers\AuthServiceProvider::class);
+// $app->register(App\Providers\EventServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
@@ -92,6 +100,17 @@ $app->register(App\Providers\EventServiceProvider::class);
 | can respond to, as well as the controllers that may handle them.
 |
 */
+$app->register(Dingo\Api\Provider\LumenServiceProvider::class);
+
+$app['Dingo\Api\Exception\Handler']->setErrorFormat([
+    'error' => [
+        'message' => ':message',
+        'errors' => ':errors',
+        'code' => ':code',
+        'status_code' => ':status_code',
+        'debug' => ':debug'
+    ]
+]);
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
